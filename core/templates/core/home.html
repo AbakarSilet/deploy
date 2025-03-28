@@ -1,0 +1,71 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<h1>Bienvenue sur notre plateforme</h1>
+
+<div class="home-content">
+    <section>
+        <h2>Upload d'images et vidéos</h2>
+        <p>Cette application vous permet d'uploader des images et vidéos (max 25 Mo).</p>
+        <a href="{% url 'upload_media' %}" class="btn">Commencer à uploader</a>
+    </section>
+
+    <section>
+        <h2>Derniers médias uploadés</h2>
+        <div class="recent-media">
+            {% for media in recent_media %}
+            <div class="media-item">
+                {% if media.media_type == 'image' %}
+                <img src="{{ media.file.url }}" alt="{{ media.file.name }}" width="150">
+                {% else %}
+                <video width="150" controls>
+                    <source src="{{ media.file.url }}" type="video/{{ media.file.name|slice:'-3:' }}">
+                </video>
+                {% endif %}
+                <p>{{ media.uploaded_at|date:"d/m/Y" }}</p>
+            </div>
+            {% empty %}
+            <p>Aucun média uploadé pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+    .home-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .btn {
+        display: inline-block;
+        background: #e8491d;
+        color: white;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 1rem;
+    }
+
+    .btn:hover {
+        background: #35424a;
+    }
+
+    .recent-media {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .media-item {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        text-align: center;
+    }
+</style>
+{% endblock %}

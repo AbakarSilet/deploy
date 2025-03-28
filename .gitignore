@@ -1,0 +1,12 @@
+venv/
+*.pyc
+__pycache__/
+.env
+*.sqlite3
+media/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

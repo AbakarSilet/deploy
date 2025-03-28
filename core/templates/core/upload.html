@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Upload de médias{% endblock %}
+
+{% block content %}
+<h1>Upload d'images et vidéos</h1>
+<p>Taille maximale : 25 Mo. Formats acceptés : JPG, PNG, GIF, MP4, MOV, AVI.</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Upload</button>
+</form>
+
+<h2>Derniers fichiers uploadés</h2>
+<div class="media-container">
+    {% for media in media_files %}
+    <div class="media-item">
+        {% if media.media_type == 'image' %}
+        <img src="{{ media.file.url }}" alt="{{ media.file.name }}">
+        {% else %}
+        <video controls>
+            <source src="{{ media.file.url }}" type="video/{{ media.file.name|slice:'-3:' }}">
+            Votre navigateur ne supporte pas la lecture de vidéos.
+        </video>
+        {% endif %}
+        <p>{{ media.file.name }}</p>
+        <p>{{ media.uploaded_at|date:"d/m/Y H:i" }}</p>
+        <p>{{ media.size|filesizeformat }}</p>
+    </div>
+    {% empty %}
+    <p>Aucun fichier uploadé pour le moment.</p>
+    {% endfor %}
+</div>
+
+<style>
+    .media-container {
+        margin-top: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .media-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .media-item img,
+    .media-item video {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .btn {
+        background: #e8491d;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .btn:hover {
+        background: #35424a;
+    }
+</style>
+{% endblock %}
