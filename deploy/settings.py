@@ -33,7 +33,9 @@ SECRET_KEY = SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ["127.0.0.1", "localhost","abakarix4.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://abakarix4.up.railway.app/"]
 # Taille maximale d'upload (25 Mo)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 26 * 1024 * 1024  # 26 Mo pour une marge
 FILE_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25 Mo
