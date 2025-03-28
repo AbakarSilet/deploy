@@ -31,11 +31,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost","abakarix4.up.railway.app"]
-CSRF_TRUSTED_ORIGINS = ["https://abakarix4.up.railway.app/"]
+ALLOWED_HOSTS = [
+    "127.0.0.1", 
+    "localhost",
+    "abakarix4.up.railway.app"
+]
+
+# Correction 1: Retirer le slash final
+CSRF_TRUSTED_ORIGINS = [
+    "https://abakarix4.up.railway.app",  # Sans slash à la fin
+    "https://*.railway.app"              # Pour tous les sous-domaines Railway
+]
+
+# Correction 2: Ajouter ces paramètres
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 # Taille maximale d'upload (25 Mo)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 26 * 1024 * 1024  # 26 Mo pour une marge
 FILE_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25 Mo
