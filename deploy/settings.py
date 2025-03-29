@@ -170,30 +170,63 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 if not DEBUG:
-    # Stockage par défaut pour les fichiers statiques et médias
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    # Configuration du stockage
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
-    # Configuration Cloudflare R2 (notez la suppression de l'espace à la fin de la clé)
+    # Configuration Cloudflare R2
     AWS_ACCESS_KEY_ID = 'efca5a8a50ab539af73adcfbecc21a3f'
     AWS_SECRET_ACCESS_KEY = '2e5030c316fcedacb1508275a8e26009188ee21a5c277342c815596387cae6a8'
     AWS_STORAGE_BUCKET_NAME = 'medias-django'
     AWS_S3_ENDPOINT_URL = 'https://5c7fb660489f3fe453e7db3c6eed9a46.r2.cloudflarestorage.com'
     
-    # Configurations supplémentaires
+    # Paramètres supplémentaires importants
+    AWS_S3_REGION_NAME = 'auto'  # Important pour R2
+    AWS_S3_ADDRESSING_STYLE = 'virtual'  # Nécessaire pour R2
+    AWS_S3_SIGNATURE_VERSION = 's3v4'  # Utilisez la signature v4
+    
+    # Configuration du cache et de l'accès
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
     AWS_DEFAULT_ACL = 'public-read'
-    AWS_QUERYSTRING_AUTH = False  # Désactive les URL signées
+    AWS_QUERYSTRING_AUTH = False
     
-    # URL de base pour vos médias - utilisez l'URL R2.dev fournie par Cloudflare
+    # URL des médias
     MEDIA_URL = 'https://pub-bc66d74f934b412697157377f7277d2c.r2.dev/'
 else:
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'boto3': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'botocore': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'storages': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
