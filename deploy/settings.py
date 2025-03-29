@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = [
@@ -174,8 +174,8 @@ if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
     # Configuration Cloudflare R2
-    AWS_ACCESS_KEY_ID = 'efca5a8a50ab539af73adcfbecc21a3f'
-    AWS_SECRET_ACCESS_KEY = '2e5030c316fcedacb1508275a8e26009188ee21a5c277342c815596387cae6a8'
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = 'medias-django'
     AWS_S3_ENDPOINT_URL = 'https://5c7fb660489f3fe453e7db3c6eed9a46.r2.cloudflarestorage.com'
     
