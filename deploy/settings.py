@@ -170,29 +170,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 if not DEBUG:
-    # Configuration du stockage
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    
-    # Configuration Cloudflare R2
+    STORAGES = {
+    "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = 'medias-django'
-    AWS_S3_ENDPOINT_URL = 'https://5c7fb660489f3fe453e7db3c6eed9a46.r2.cloudflarestorage.com'
-    
-    # Paramètres supplémentaires importants
-    AWS_S3_REGION_NAME = 'auto'  # Important pour R2
-    AWS_S3_ADDRESSING_STYLE = 'virtual'  # Nécessaire pour R2
-    AWS_S3_SIGNATURE_VERSION = 's3v4'  # Utilisez la signature v4
-    
-    # Configuration du cache et de l'accès
-    AWS_S3_OBJECT_PARAMETERS = {
-        'CacheControl': 'max-age=86400',
-    }
-    AWS_DEFAULT_ACL = 'public-read'
-    AWS_QUERYSTRING_AUTH = False
-    
-    # URL des médias
-    MEDIA_URL = 'https://pub-bc66d74f934b412697157377f7277d2c.r2.dev/'
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    AWS_S3_FILE_OVERWRITE = False
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
