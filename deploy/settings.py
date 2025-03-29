@@ -187,7 +187,7 @@ if not DEBUG:
     AWS_QUERYSTRING_AUTH = False  # Désactive les URL signées
     
     # URL de base pour vos médias
-    MEDIA_URL = f'https://medias-django.5c7fb660489f3fe453e7db3c6eed9a46.r2.dev/'
+    MEDIA_URL = 'https://abakarix4.up.railway.app/'
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = BASE_DIR / 'media'
